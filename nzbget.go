@@ -64,19 +64,19 @@ func (s *Status) UnmarshalJSON(b []byte) error {
 
 	type temp struct {
 		ArticleCacheHi   uint32 `json:"ArticleCacheHi"`
-		ArticleCacheLo   uint32 `json:"ArticleCacheLo"`
+		ArticleCacheLo   int64  `json:"ArticleCacheLo"`
 		DaySizeHi        uint32 `json:"DaySizeHi"`
-		DaySizeLo        uint32 `json:"DaySizeLo"`
+		DaySizeLo        int64  `json:"DaySizeLo"`
 		DownloadedSizeHi uint32 `json:"DownloadedSizeHi"`
-		DownloadedSizeLo uint32 `json:"DownloadedSizeLo"`
+		DownloadedSizeLo int64  `json:"DownloadedSizeLo"`
 		ForcedSizeHi     uint32 `json:"ForcedSizeHi"`
-		ForcedSizeLo     uint32 `json:"ForcedSizeLo"`
+		ForcedSizeLo     int64  `json:"ForcedSizeLo"`
 		FreeDiskSpaceHi  uint32 `json:"FreeDiskSpaceHi"`
-		FreeDiskSpaceLo  uint32 `json:"FreeDiskSpaceLo"`
+		FreeDiskSpaceLo  int64  `json:"FreeDiskSpaceLo"`
 		MonthSizeHi      uint32 `json:"MonthSizeHi"`
-		MonthSizeLo      uint32 `json:"MonthSizeLo"`
+		MonthSizeLo      int64  `json:"MonthSizeLo"`
 		RemainingSizeHi  uint32 `json:"RemainingSizeHi"`
-		RemainingSizeLo  uint32 `json:"RemainingSizeLo"`
+		RemainingSizeLo  int64  `json:"RemainingSizeLo"`
 
 		ServerTime int64 `json:"ServerTime"`
 		ResumeTime int64 `json:"ResumeTime"`
@@ -342,18 +342,18 @@ func reflectInto(v reflect.Value, str string) {
 }
 
 type ServerVolume struct {
-	ID         int   `json:"-"`
-	TotalBytes int64 `json:"-"`
+	ID             int   `json:"-"`
+	TotalBytes     int64 `json:"-"`
+	BytesPerSecond int64 `json:"-"`
 }
 
 func (v *ServerVolume) UnmarshalJSON(b []byte) error {
-	type temp struct {
+	values := struct {
 		ServerID    int    `json:"ServerID"`
-		TotalSizeLo uint32 `json:"TotalSizeLo"`
+		TotalSizeLo int64  `json:"TotalSizeLo"`
 		TotalSizeHi uint32 `json:"TotalSizeHi"`
-	}
+	}{}
 
-	values := temp{}
 	err := json.Unmarshal(b, &values)
 	if err != nil {
 		return err
@@ -361,5 +361,6 @@ func (v *ServerVolume) UnmarshalJSON(b []byte) error {
 
 	v.ID = values.ServerID
 	v.TotalBytes = joinInt64(values.TotalSizeLo, values.TotalSizeHi)
+
 	return nil
 }
