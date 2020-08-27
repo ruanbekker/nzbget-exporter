@@ -28,14 +28,14 @@ docker run -t \
   -e NZBGET_USERNAME=nzbget \
   -e NZBGET_PASSWORD=tegbzn6789 \
   -p 9452:9452 \
-  frebib/nzbget-exporter
+  ruanbekker/nzbget-exporter
 ```
 
 Run with docker-compose
 ```yaml
 services:
   nzbget_exporter:
-    image: frebib/nzbget-exporter
+    image: ruanbekker/nzbget-exporter
     tty: true
     environment:
     - NZBGET_HOST=http://nzbget:6789
